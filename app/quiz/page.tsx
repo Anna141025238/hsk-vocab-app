@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { TopBar } from '@/components/TopBar';
@@ -24,7 +25,7 @@ const LEVELS = [
 
 type QuizPhase = 'setup' | 'quiz' | 'result';
 
-export default function QuizPage() {
+function QuizPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryLevel = searchParams.get('level') || 'hsk1';
@@ -139,15 +140,14 @@ export default function QuizPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-4 mb-6">
-            {[5, 10, 20, 'all'].map((count) => (
-              <button
-                key={count}
-                onClick={() => startQuiz(count === 'all' ? words.length : count)}
-                className="btn btn-primary"
-              >
-                {count === 'all' ? 'ทั้งหมด' : `${count} ข้อ`}
+            {([5, 10, 20] as number[]).map((count) => (
+              <button key={count} onClick={() => startQuiz(count)} className="btn btn-primary">
+                {count} ข้อ
               </button>
             ))}
+            <button onClick={() => startQuiz(words.length)} className="btn btn-primary">
+              ทั้งหมด
+            </button>
           </div>
         </div>
       </main>
@@ -255,4 +255,12 @@ export default function QuizPage() {
       </main>
     );
   }
+}
+
+export default function QuizPageWrapper() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-desk flex items-center justify-center"><p className="text-ink">กำลังโหลด...</p></div>}>
+      <QuizPage />
+    </Suspense>
+  );
 }

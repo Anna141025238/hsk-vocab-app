@@ -22,7 +22,7 @@ const LEVELS = [
   { id: 'hsk79tz', label: 'HSK 7-9 (T-Z)' },
 ];
 
-export default function FlashcardPage() {
+function FlashcardPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryLevel = searchParams.get('level') || 'hsk1';
@@ -202,5 +202,16 @@ export default function FlashcardPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+// Wrap with Suspense for useSearchParams
+import { Suspense } from 'react';
+
+export default function FlashcardPageWrapper() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-desk flex items-center justify-center"><p className="text-ink">กำลังโหลด...</p></div>}>
+      <FlashcardPage />
+    </Suspense>
   );
 }

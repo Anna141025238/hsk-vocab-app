@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
+import { trackPageView } from '@/lib/analytics';
 import { TopBar } from '@/components/TopBar';
 import { LevelCard } from '@/components/LevelCard';
 import { ThemeSelector } from '@/components/ThemeSelector';
@@ -32,6 +33,7 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
+    trackPageView();
 
     // Load membership status from localStorage (temporary until DB ready)
     const member = localStorage.getItem('hskvocab_member');
