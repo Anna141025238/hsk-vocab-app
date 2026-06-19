@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Noto_Serif_SC, Noto_Serif_Thai, Noto_Serif, Chonburi, Caveat } from 'next/font/google';
+import { AuthProvider } from '@/lib/auth-context';
 import './globals.css';
 
 const notoSerifSC = Noto_Serif_SC({
@@ -49,7 +50,9 @@ export default function RootLayout({
       className={`${notoSerifSC.variable} ${notoSerifTh.variable} ${notoSerif.variable} ${chonburi.variable} ${caveat.variable}`}
     >
       <body className="bg-desk font-noto-serif-th text-ink antialiased">
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

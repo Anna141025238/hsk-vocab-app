@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/auth-context';
 import { TopBar } from '@/components/TopBar';
 import { LevelCard } from '@/components/LevelCard';
 import { ThemeSelector } from '@/components/ThemeSelector';
+import { getMembershipStatus } from '@/lib/membership';
 
 const LEVELS = [
   { id: 'hsk1', label: 'HSK 1', words: 300, free: true },
@@ -20,17 +22,27 @@ const LEVELS = [
 
 export default function Home() {
   const router = useRouter();
+  const { user, loading } = useAuth();
   const [isMember, setIsMember] = useState(false);
+  const [remainingDays, setRemainingDays] = useState(0);
   const [theme, setTheme] = useState('white');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    // Load membership status from localStorage (temporary)
+
+    // Load membership status from localStorage (temporary until DB ready)
     const member = localStorage.getItem('hskvocab_member');
     if (member) {
       const { active, expiry } = JSON.parse(member);
-      setIsMember(active && new Date(expiry) > new Date());
+      const isValid = active && new Date(expiry) > new Date();
+      setIsMember(isValid);
+      if (isValid) {
+        const days = Math.ceil(
+          (new Date(expiry).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
+        );
+        setRemainingDays(Math.max(0, days));
+      }
     }
 
     // Load theme preference
@@ -38,7 +50,7 @@ export default function Home() {
     setTheme(savedTheme);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted || loading) return null;
 
   const handleLevelSelect = (levelId: string, mode: 'flashcard' | 'quiz') => {
     if (mode === 'flashcard') {
@@ -50,7 +62,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-desk">
-      <TopBar isMember={isMember} theme={theme} />
+      <TopBar isMember={isMember} theme={theme} remainingDays={remainingDays} />
 
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Hero Section */}
