@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #2E2E2E;
+  --paper: #FBFAF5;
+  --desk: #cdc6b6;
+  --topbar: #f1ece1;
+  --accent-blue: #AAB6C4;
+  --accent-brown: #97744e;
+  --success-bg: #dbe6d3;
+  --gold-bg: #f3ead4;
+  --tape-1: #8E8B85;
+  --tape-2: #8C6A45;
+  --tape-solid: #2E2E2E;
+}
+
+html {
+  font-feature-settings: 'liga' 1, 'calt' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  @apply bg-desk;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  @apply text-ink font-noto-serif-sc;
+}
+
+p, div, span, button {
+  @apply text-ink;
+}
+
+/* Utility classes */
+.paper-surface {
+  @apply bg-paper shadow-lg;
+  box-shadow: 0 16px 30px -18px rgba(40, 40, 40, 0.5);
+}
+
+.card {
+  @apply p-6 rounded-lg paper-surface;
+}
+
+.btn {
+  @apply px-4 py-2 rounded-md font-medium transition-colors min-h-[42px] flex items-center justify-center;
+}
+
+.btn-primary {
+  @apply btn bg-accent-blue text-paper hover:bg-opacity-90;
+}
+
+.btn-success {
+  @apply btn bg-success-bg text-success-text border border-success-border;
+}
+
+.btn-gold {
+  @apply btn bg-gold-bg text-gold-text border border-gold-border hover:bg-gold-bg-2;
+}
+
+.btn-danger {
+  @apply btn text-danger-text hover:bg-red-100;
+}
+
+/* SVG Filters for textures */
+svg {
+  display: none;
+}
+
+.noise-texture {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="noise" /></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.05" /></svg>');
+}
+
+/* Animations */
+@keyframes flip {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(180deg);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes floatIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-flip {
+  animation: flip 0.5s ease-in-out;
+  perspective: 1000px;
+}
+
+.animate-pop-in {
+  animation: popIn 0.25s ease-out;
+}
+
+.animate-float-in {
+  animation: floatIn 0.45s ease-out;
+}
+
+/* Sticky top bar */
+.sticky-topbar {
+  @apply sticky top-0 z-40 bg-topbar shadow-sm;
+}
