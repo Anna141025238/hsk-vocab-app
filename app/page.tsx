@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { TopBar } from '@/components/TopBar';
 import { LevelCard } from '@/components/LevelCard';
 import { ThemeSelector } from '@/components/ThemeSelector';
@@ -18,6 +19,7 @@ const LEVELS = [
 ];
 
 export default function Home() {
+  const router = useRouter();
   const [isMember, setIsMember] = useState(false);
   const [theme, setTheme] = useState('white');
   const [mounted, setMounted] = useState(false);
@@ -37,6 +39,14 @@ export default function Home() {
   }, []);
 
   if (!mounted) return null;
+
+  const handleLevelSelect = (levelId: string, mode: 'flashcard' | 'quiz') => {
+    if (mode === 'flashcard') {
+      router.push(`/flashcard?level=${levelId}`);
+    } else {
+      router.push(`/quiz?level=${levelId}`);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-desk">
@@ -66,6 +76,8 @@ export default function Home() {
               level={level}
               isMember={isMember}
               canAccess={level.free || isMember}
+              onFlashcard={() => handleLevelSelect(level.id, 'flashcard')}
+              onQuiz={() => handleLevelSelect(level.id, 'quiz')}
             />
           ))}
         </div>

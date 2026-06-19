@@ -11,9 +11,11 @@ interface LevelCardProps {
   level: Level;
   isMember: boolean;
   canAccess: boolean;
+  onFlashcard?: () => void;
+  onQuiz?: () => void;
 }
 
-export function LevelCard({ level, isMember, canAccess }: LevelCardProps) {
+export function LevelCard({ level, isMember, canAccess, onFlashcard, onQuiz }: LevelCardProps) {
   return (
     <div className="paper-surface rounded-lg p-6">
       <div className="flex items-start justify-between mb-4">
@@ -44,8 +46,8 @@ export function LevelCard({ level, isMember, canAccess }: LevelCardProps) {
       <div className="flex gap-3">
         {canAccess ? (
           <>
-            <button className="btn-primary flex-1">แฟลชการ์ด</button>
-            <button className="btn-primary flex-1">ควิซ</button>
+            <button onClick={onFlashcard} className="btn-primary flex-1">แฟลชการ์ด</button>
+            <button onClick={onQuiz} className="btn-primary flex-1">ควิซ</button>
           </>
         ) : (
           <button className="btn-gold w-full">ปลดล็อก</button>
