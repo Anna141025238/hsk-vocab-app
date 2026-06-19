@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/auth-context';
 import { TopBar } from '@/components/TopBar';
 import { LevelCard } from '@/components/LevelCard';
 import { ThemeSelector } from '@/components/ThemeSelector';
+import { PaymentModal } from '@/components/PaymentModal';
 import { getMembershipStatus } from '@/lib/membership';
 
 const LEVELS = [
@@ -27,6 +28,7 @@ export default function Home() {
   const [remainingDays, setRemainingDays] = useState(0);
   const [theme, setTheme] = useState('white');
   const [mounted, setMounted] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -90,6 +92,7 @@ export default function Home() {
               canAccess={level.free || isMember}
               onFlashcard={() => handleLevelSelect(level.id, 'flashcard')}
               onQuiz={() => handleLevelSelect(level.id, 'quiz')}
+              onUnlock={() => setShowPaymentModal(true)}
             />
           ))}
         </div>
@@ -102,6 +105,15 @@ export default function Home() {
           <p className="text-text-muted">ไม่มีคำศัพท์ที่ต้องทำการตรวจสอบ</p>
         </div>
       </div>
+
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        onSuccess={() => {
+          setIsMember(true);
+          setRemainingDays(30);
+        }}
+      />
     </main>
   );
 }
